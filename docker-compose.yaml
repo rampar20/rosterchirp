@@ -1,0 +1,63 @@
+services:
+  rosterchirp:
+    image: rosterchirp:${ROSTERCHIRP_VERSION:-latest}
+    container_name: ${PROJECT_NAME:-rosterchirp}
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - TZ=${TZ:-UTC}
+      - APP_TYPE=${APP_TYPE:-selfhost}
+      - ADMIN_NAME=${ADMIN_NAME:-Admin User}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@rosterchirp.local}
+      - ADMIN_PASS=${ADMIN_PASS:-Admin@1234}
+      - ADMPW_RESET=${ADMPW_RESET:-false}
+      - JWT_SECRET=${JWT_SECRET:-changeme_super_secret_jwt_key_2024}
+      - APP_NAME=${APP_NAME:-rosterchirp}
+      - DEFCHAT_NAME=${DEFCHAT_NAME:-General Chat}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-rosterchirp}
+      - DB_USER=${DB_USER:-rosterchirp}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD is required}
+      - HOST_DOMAIN=${HOST_DOMAIN:-}
+      - HOST_ADMIN_KEY=${HOST_ADMIN_KEY:-}
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY:-}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID:-}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID:-}
+      - FIREBASE_VAPID_KEY=${FIREBASE_VAPID_KEY:-}
+      - FIREBASE_SERVICE_ACCOUNT=${FIREBASE_SERVICE_ACCOUNT}
+    volumes:
+      - rosterchirp_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  db:
+    image: postgres:16-alpine
+    container_name: ${PROJECT_NAME:-rosterchirp}_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_NAME:-rosterchirp}
+      - POSTGRES_USER=${DB_USER:-rosterchirp}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:?DB_PASSWORD is required}
+    volumes:
+      - rosterchirp_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-rosterchirp} -d ${DB_NAME:-rosterchirp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rosterchirp_db:
+    driver: local
+  rosterchirp_uploads:
+    driver: local

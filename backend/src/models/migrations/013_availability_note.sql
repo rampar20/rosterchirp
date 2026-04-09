@@ -1,0 +1,1 @@
+ALTER TABLE event_availability ADD COLUMN IF NOT EXISTS note VARCHAR(20);

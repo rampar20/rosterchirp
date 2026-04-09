@@ -1,0 +1,255 @@
+.message-input-area {
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;  /* never compress — always visible above keyboard */
+  position: relative;
+  z-index: 2;
+  /* Centre input content with max-width on wide screens */
+  align-items: stretch;
+}
+
+/* All direct children of the input area capped at 1024px and centred */
+.message-input-area > * {
+  max-width: 1024px;
+  width: 100%;
+  align-self: center;
+  box-sizing: border-box;
+}
+
+.reply-bar-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--primary);
+}
+
+.reply-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--primary);
+}
+
+.reply-preview-text {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.img-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: var(--background);
+  border-radius: var(--radius);
+}
+
+.img-preview {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.link-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.link-prev-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.mention-dropdown {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mention-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 14px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.mention-item:hover, .mention-item.active { background: var(--primary-light); }
+
+.mention-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mention-role {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-transform: capitalize;
+}
+
+.input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.input-action {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.input-action:hover { color: var(--primary); }
+
+.input-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.msg-input {
+  width: 100%;
+  min-height: 40px;
+  max-height: calc(1.4em * 5 + 20px); /* 5 lines × line-height + padding */
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--surface-variant);
+  transition: border-color var(--transition);
+  overflow-y: hidden;
+  resize: none;
+}
+.msg-input:focus { outline: none; border-color: var(--primary); background: var(--surface-variant); }
+.msg-input::placeholder { color: var(--text-tertiary); }
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+  transition: var(--transition);
+  background: var(--background);
+}
+.send-btn.active {
+  background: var(--primary);
+  color: white;
+}
+.send-btn.active:hover { background: var(--primary-dark); }
+.send-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* + attach button */
+.attach-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.attach-btn {
+  color: var(--primary);
+}
+.attach-btn:hover {
+  color: var(--primary-dark);
+}
+
+/* Attach menu popup */
+.attach-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 100;
+  min-width: 140px;
+}
+
+.attach-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.attach-item:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.attach-item svg {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+.attach-item:hover svg {
+  color: var(--primary);
+}
+
+/* Emoji picker popover — positioned above the input area */
+.emoji-input-picker {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+}
+
+/* PC only: enforce minimum width on the input row so send button never disappears */
+@media (pointer: fine) and (hover: hover) {
+  .input-row {
+    min-width: 480px;
+  }
+}
+
+/* iOS keyboard fix: when keyboard is open, env(safe-area-inset-bottom) stays at ~34px
+   instead of dropping to 0 — remove it so there's no empty gap below the input */
+.keyboard-open .message-input-area {
+  padding-bottom: 12px;
+}
+

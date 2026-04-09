@@ -1,0 +1,51 @@
+<info_box>
+	CVS Format (title>
+
+	FULL: email,firstname,lastname,password,role,default_usergroup
+	MINIMUM: email,firstname,lastname,,,
+	OPTIONAL: email,firstname,lastname,,,default_usergroup
+
+	We highly recommend using spreadsheet editor and save as a CSV file to ensure maximum accuracy
+	You can include this header row (ie: email,firstname,lastname,password,role,usergroup,minor,guardian-user-email)
+
+	Examples:
+	Parent: example@rosterchirp.com,Barney,Rubble,,member,parents,,
+	Player: example@rosterchirp.com,Barney,Rubble,Ori0n2026!,member,players,,
+	Minor: Player: example@rosterchirp.com,Barney,Rubble,Ori0n2026!,member,players,minor,example@rosterchirp.com
+
+	CVS Details (accordion title) - collapsed by default, click title to expand accordion
+	<accordion>
+
+		CSV requirements:
+			five commas, exactly, are required per row (rows with more or less will be ignored)
+			email,firstname,lastname are the minimum required fields
+			user can onlt be added to one group during a bulk import.
+			optional fields: these fields can be left blank and the system defaults will be used
+
+		User Groups available: *
+			list $user_groups (single column, multiple rows) that new users can be added to
+
+		Roles available: *
+			member - non-priviledged user (default)
+			manager - priviledged user: add/edit/remove schedules/users/user groups etc
+			admin - priviledged user: manager + edit settings, change branding
+
+		* Only available group values (user group, roles) will be used, group values that do not exist will be ignored
+
+		Option field defaults: 	
+			password ($setpass)
+			role = member
+			usergroup = <unset>
+			minor = <unset>
+			guardian-user-email = <unset>
+		
+	</accordion>
+</info_box>
+
+[Select CVS file] button as it currently exists
+checkbox "Ignore first row (header)"
+
+**** Do not include the following text in the details above, they are your build instrcutions
+Build Instructions
+- validate all CVS requirements, skip rows that do not mean requirements
+- even if ignore first row is unchecked, check first header row for any values in "FULL" format, if true ignore row

@@ -1,0 +1,102 @@
+.chat-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  height: var(--visual-viewport-height, 100dvh); /* iOS keyboard fix: shrinks to visible area above keyboard */
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* Global top bar */
+.global-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  height: 72px;
+  min-height: 72px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+.global-bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.global-bar-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.global-bar-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.global-bar-offline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #e53935;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.offline-label {
+  font-size: 13px;
+}
+
+/* Body below global bar */
+.chat-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;  /* allows body to shrink when mobile keyboard resizes viewport */
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .chat-layout {
+    /* position: fixed keeps the layout pinned to the visual viewport even when
+       iOS scrolls the page on keyboard open. Without this, iOS scrolls the page
+       to bring the focused textarea into view, moving it to the top of the screen.
+       --visual-viewport-offset tracks the visual viewport's scrolled position so
+       the layout follows if iOS shifts it (usually 0, non-zero during keyboard open). */
+    position: fixed;
+    top: var(--visual-viewport-offset, 0px);
+    left: 0;
+    right: 0;
+  }
+  .chat-body {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .global-bar {
+    height: 56px;
+    min-height: 56px;
+  }
+}
+
+[data-theme="dark"] .global-bar {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.no-chat-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  gap: 4px;
+  user-select: none;
+}

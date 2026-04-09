@@ -1,0 +1,86 @@
+# Caddyfile.example — RosterChirp-Host reverse proxy
+#
+# Caddy handles SSL automatically via Let's Encrypt.
+# Wildcard certs require a DNS challenge provider.
+#
+# Prerequisites:
+#   1. Install the Caddy DNS plugin for your provider:
+#      https://caddyserver.com/docs/automatic-https#dns-challenge
+#      Common providers: cloudflare, route53, digitalocean
+#
+#   2. Set your DNS API token as an environment variable:
+#      CF_API_TOKEN=your_cloudflare_token  (or equivalent)
+#
+#   3. Add a wildcard DNS record in your DNS provider:
+#      *.rosterchirp.com → your server IP
+#      rosterchirp.com   → your server IP
+#
+# Usage:
+#   Copy this file to /etc/caddy/Caddyfile (or wherever Caddy reads it)
+#   Reload: caddy reload
+
+# ── Wildcard subdomain ────────────────────────────────────────────────────────
+# Handles team1.rosterchirp.com, teamB.rosterchirp.com, etc.
+# Replace rosterchirp.com with your actual HOST_DOMAIN.
+
+*.rosterchirp.com {
+    tls {
+        dns cloudflare {env.CF_API_TOKEN}
+    }
+
+    # Forward all requests to the rosterchirp app container
+    reverse_proxy localhost:3000
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+
+    # Logs (optional)
+    log {
+        output file /var/log/caddy/rosterchirp-access.log
+        format json
+    }
+}
+
+# ── Base domain (host admin panel) ───────────────────────────────────────────
+rosterchirp.com {
+    reverse_proxy localhost:3000
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options nosniff
+        -Server
+    }
+}
+
+# ── Custom tenant domains ─────────────────────────────────────────────────────
+# When a tenant sets up a custom domain (e.g. chat.theircompany.com):
+#
+# 1. They add a DNS CNAME: chat.theircompany.com → rosterchirp.com
+#
+# 2. You add a block here and reload Caddy.
+#    Caddy will automatically obtain and renew the SSL cert.
+#
+# Example:
+#
+# chat.theircompany.com {
+#     reverse_proxy localhost:3000
+# }
+#
+# Alternatively, use Caddy's on-demand TLS to handle custom domains
+# automatically without editing this file:
+#
+# (on_demand_tls) {
+#     on_demand {
+#         ask http://localhost:3000/api/host/verify-domain
+#     }
+# }
+#
+# *.rosterchirp.com, rosterchirp.com {
+#     tls { on_demand }
+#     reverse_proxy localhost:3000
+# }
