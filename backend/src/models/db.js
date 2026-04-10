@@ -14,13 +14,13 @@ const fs   = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 
-// APP_TYPE validation — host mode requires HOST_DOMAIN and HOST_ADMIN_KEY.
-// If either is missing, fall back to selfhost and warn rather than silently
+// APP_TYPE validation — host mode requires APP_DOMAIN, HOST_SLUG, and HOST_ADMIN_KEY.
+// If any are missing, fall back to selfhost and warn rather than silently
 // exposing a broken or insecure host control plane.
 let APP_TYPE = (process.env.APP_TYPE || 'selfhost').toLowerCase().trim();
 if (APP_TYPE === 'host') {
-  if (!process.env.HOST_DOMAIN || !process.env.HOST_ADMIN_KEY) {
-    console.warn('[DB] WARNING: APP_TYPE=host requires HOST_DOMAIN and HOST_ADMIN_KEY to be set.');
+  if (!process.env.APP_DOMAIN || !process.env.HOST_SLUG || !process.env.HOST_ADMIN_KEY) {
+    console.warn('[DB] WARNING: APP_TYPE=host requires APP_DOMAIN, HOST_SLUG, and HOST_ADMIN_KEY to be set.');
     console.warn('[DB] WARNING: Falling back to APP_TYPE=selfhost for safety.');
     APP_TYPE = 'selfhost';
   }
@@ -52,12 +52,17 @@ function resolveSchema(req) {
   if (APP_TYPE === 'selfhost') return 'public';
 
   const host = (req.headers.host || '').toLowerCase().split(':')[0];
-  const baseDomain = (process.env.HOST_DOMAIN || 'rosterchirp.com').toLowerCase();
+  const baseDomain = (process.env.APP_DOMAIN || 'rosterchirp.com').toLowerCase();
+  const hostSlug   = (process.env.HOST_SLUG   || 'host').toLowerCase();
+  const hostControlDomain = `${hostSlug}.${baseDomain}`;
 
   // Internal requests (Docker health checks, localhost) → public schema
   if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return 'public';
 
-  // Subdomain: team1.rosterchirp.com → tenant_team1
+  // Host control panel subdomain: chathost.example.com → public schema
+  if (host === hostControlDomain) return 'public';
+
+  // Tenant subdomain: mychat.example.com → tenant_mychat
   if (host.endsWith(`.${baseDomain}`)) {
     const slug = host.slice(0, -(baseDomain.length + 1));
     if (!slug || slug === 'www') throw new Error(`Invalid tenant slug: ${slug}`);
@@ -66,9 +71,6 @@ function resolveSchema(req) {
 
   // Custom domain lookup (populated from host admin DB)
   if (tenantDomainCache.has(host)) return tenantDomainCache.get(host);
-
-  // Base domain → public schema (host admin panel)
-  if (host === baseDomain || host === `www.${baseDomain}`) return 'public';
 
   throw new Error(`Unknown tenant for host: ${host}`);
 }

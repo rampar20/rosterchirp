@@ -39,14 +39,16 @@ router.get('/', async (req, res) => {
     if (admin) obj.admin_email = admin.email;
     obj.app_version = process.env.ROSTERCHIRP_VERSION || 'dev';
     obj.user_pass   = process.env.USER_PASS || 'user@1234';
-    // Tell the frontend whether this request came from the HOST_DOMAIN.
-    // Used to show/hide the Control Panel menu item — only visible on the host's own domain.
+    // Tell the frontend whether this request came from the host control panel subdomain.
+    // Used to show/hide the Control Panel menu item — only visible on the host's own subdomain.
     const reqHost = (req.headers.host || '').toLowerCase().split(':')[0];
-    const hostDomain = (process.env.HOST_DOMAIN || '').toLowerCase();
+    const appDomain = (process.env.APP_DOMAIN || '').toLowerCase();
+    const hostSlug  = (process.env.HOST_SLUG  || 'host').toLowerCase();
+    const hostControlDomain = appDomain ? `${hostSlug}.${appDomain}` : '';
     obj.is_host_domain = (
       process.env.APP_TYPE === 'host' &&
-      !!hostDomain &&
-      (reqHost === hostDomain || reqHost === `www.${hostDomain}` || reqHost === 'localhost')
+      !!hostControlDomain &&
+      (reqHost === hostControlDomain || reqHost === 'localhost')
     ) ? 'true' : 'false';
     res.json({ settings: obj });
   } catch (e) { res.status(500).json({ error: e.message }); }

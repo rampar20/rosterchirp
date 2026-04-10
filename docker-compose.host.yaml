@@ -8,7 +8,8 @@
 #
 # Required .env additions for host mode:
 #   APP_TYPE=host
-#   HOST_DOMAIN=rosterchirp.com
+#   APP_DOMAIN=example.com
+#   HOST_SLUG=chathost
 #   HOST_ADMIN_KEY=your_secret_host_admin_key
 #   CF_API_TOKEN=your_cloudflare_dns_api_token  (or equivalent for your DNS provider)
 
@@ -36,7 +37,8 @@ services:
       - DB_NAME=${DB_NAME:-rosterchirp}
       - DB_USER=${DB_USER:-rosterchirp}
       - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD is required}
-      - HOST_DOMAIN=${HOST_DOMAIN:?HOST_DOMAIN is required in host mode}
+      - APP_DOMAIN=${APP_DOMAIN:?APP_DOMAIN is required in host mode}
+      - HOST_SLUG=${HOST_SLUG:?HOST_SLUG is required in host mode}
       - HOST_ADMIN_KEY=${HOST_ADMIN_KEY:?HOST_ADMIN_KEY is required in host mode}
     volumes:
       - rosterchirp_uploads:/app/uploads

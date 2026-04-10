@@ -12,18 +12,17 @@
 #      CF_API_TOKEN=your_cloudflare_token  (or equivalent)
 #
 #   3. Add a wildcard DNS record in your DNS provider:
-#      *.rosterchirp.com → your server IP
-#      rosterchirp.com   → your server IP
+#      *.example.com → your server IP
 #
 # Usage:
 #   Copy this file to /etc/caddy/Caddyfile (or wherever Caddy reads it)
 #   Reload: caddy reload
 
 # ── Wildcard subdomain ────────────────────────────────────────────────────────
-# Handles team1.rosterchirp.com, teamB.rosterchirp.com, etc.
-# Replace rosterchirp.com with your actual HOST_DOMAIN.
+# Handles mychat.example.com, teamB.example.com, chathost.example.com, etc.
+# Replace example.com with your actual APP_DOMAIN.
 
-*.rosterchirp.com {
+*.example.com {
     tls {
         dns cloudflare {env.CF_API_TOKEN}
     }
@@ -47,20 +46,10 @@
     }
 }
 
-# ── Base domain (host admin panel) ───────────────────────────────────────────
-rosterchirp.com {
-    reverse_proxy localhost:3000
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
-        X-Content-Type-Options nosniff
-        -Server
-    }
-}
-
 # ── Custom tenant domains ─────────────────────────────────────────────────────
 # When a tenant sets up a custom domain (e.g. chat.theircompany.com):
 #
-# 1. They add a DNS CNAME: chat.theircompany.com → rosterchirp.com
+# 1. They add a DNS CNAME: chat.theircompany.com → your server IP
 #
 # 2. You add a block here and reload Caddy.
 #    Caddy will automatically obtain and renew the SSL cert.
@@ -80,7 +69,7 @@ rosterchirp.com {
 #     }
 # }
 #
-# *.rosterchirp.com, rosterchirp.com {
+# *.example.com {
 #     tls { on_demand }
 #     reverse_proxy localhost:3000
 # }

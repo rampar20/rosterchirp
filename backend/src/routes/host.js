@@ -162,7 +162,7 @@ router.post('/tenants', async (req, res) => {
     // 7. Reload domain cache
     await reloadTenantCache();
 
-    const baseDomain = process.env.HOST_DOMAIN || 'rosterchirp.com';
+    const baseDomain = process.env.APP_DOMAIN || 'rosterchirp.com';
     const tenant = tr.rows[0];
     tenant.url = `https://${slug}.${baseDomain}`;
 
@@ -320,7 +320,7 @@ router.get('/status', async (req, res) => {
   try {
     const tenantCount = await queryOne('public', 'SELECT COUNT(*) AS count FROM tenants');
     const active = await queryOne('public', "SELECT COUNT(*) AS count FROM tenants WHERE status='active'");
-    const baseDomain = process.env.HOST_DOMAIN || 'rosterchirp.com';
+    const baseDomain = process.env.APP_DOMAIN || 'rosterchirp.com';
     res.json({
       ok: true,
       appType: process.env.APP_TYPE || 'selfhost',

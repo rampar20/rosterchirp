@@ -96,7 +96,7 @@ Development was vibe-coded using Claude.ai.
 | Mode | Description |
 |---|---|
 | `selfhost` | Single tenant — one team, one database schema. Default. |
-| `host` | Multi-tenant — one schema per tenant, provisioned via subdomains. Requires `HOST_DOMAIN` and `HOST_ADMIN_KEY`. |
+| `host` | Multi-tenant — one schema per tenant, provisioned via subdomains. Requires `APP_DOMAIN`, `HOST_SLUG`, and `HOST_ADMIN_KEY`. |
 
 Set `APP_TYPE=selfhost` or `APP_TYPE=host` in `.env`.
 
@@ -293,7 +293,8 @@ volumes:
 | `DB_NAME` | `rosterchirp` | PostgreSQL database name |
 | `DB_USER` | `rosterchirp` | PostgreSQL username |
 | `DB_PASSWORD` | *(required)* | PostgreSQL password. **Avoid `!` — shell interpolation issue with Docker Compose.** |
-| `HOST_DOMAIN` | — | Root domain for multi-tenant host mode (e.g. `app.yourdomain.com`) |
+| `APP_DOMAIN` | — | Base domain for multi-tenant host mode (e.g. `example.com`) |
+| `HOST_SLUG` | — | Subdomain slug for the host control panel (e.g. `chathost` → `chathost.example.com`) |
 | `HOST_ADMIN_KEY` | — | Secret key for the host control plane API |
 
 ### Firebase Push Notification Variables (optional)
