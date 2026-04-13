@@ -6,6 +6,12 @@ Development was vibe-coded using Claude.ai.
 
 **Current version:** 0.13.1
 
+<img src="https://github.com/rampar20/rosterchirp/tree/main/screens/messages-private-user2user.png" alt="Alt Text" width="200">
+<img src="https://github.com/rampar20/rosterchirp/tree/main/screens/dark-mode.png" alt="Alt Text" width="200">
+<img src="https://github.com/rampar20/rosterchirp/tree/main/screens/schedules.png" alt="Alt Text" width="200">
+<img src="https://github.com/rampar20/rosterchirp/tree/main/screens/schedules-event-editor.png" alt="Alt Text" width="200">
+<img src="https://github.com/rampar20/rosterchirp/tree/main/screens/schedules-tracking-response.png" alt="Alt Text" width="200">
+
 ---
 
 ## Features
