@@ -2,7 +2,7 @@
 
 # RosterChirp
 
-A modern, self-hosted team messaging Progressive Web App (PWA) built for small to medium teams. RosterChirp runs via Docker Compose with PostgreSQL and supports both single-tenant (self-hosted) and multi-tenant (hosted) deployments. 
+A modern, feature packed, self-hosted, team messaging progressive web app (PWA). Originally developed for sports teams, it can be used for any type of private team messaging. RosterChirp runs via Docker Compose with PostgreSQL and supports both single-tenant (self-hosted) and multi-tenant (hosted) deployments. 
 
 Development was vibe-coded using Claude.ai.
 
@@ -16,7 +16,6 @@ Development was vibe-coded using Claude.ai.
 <img width="200" alt="schedules-tracking-response" src="https://github.com/user-attachments/assets/55967732-9d2b-413b-a58e-a47e4967fd28" />
 <img width="200" alt="user-manager" src="https://github.com/user-attachments/assets/1642b98e-60d1-4934-be58-3105e46b5ca8" />
 <img width="200" alt="user-manager-create-user" src="https://github.com/user-attachments/assets/09a35c79-45ff-4cce-be6d-81ee13fbc5f4" />
-
 
 ---
 
