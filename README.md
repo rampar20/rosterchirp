@@ -543,8 +543,3 @@ cd frontend && npm install && npm run dev
 
 The Vite dev server proxies all `/api` and `/socket.io` requests to the backend automatically. You will need a running PostgreSQL instance and a `.env` file in the project root.
 
----
-
-## License
-
-Proprietary — all rights reserved.
